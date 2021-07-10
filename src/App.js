@@ -1,13 +1,6 @@
 import React from 'react';
+import Routes from './routes';
 
-import Layout from './components/Layout';
-
-function App() {
-	return (
-		<div id="app">
-			<Layout />
-		</div>
-	);
-}
+const App = () => <Routes />	
 
 export default App;

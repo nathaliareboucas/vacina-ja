@@ -4,11 +4,11 @@ import { Container } from './styles';
 import Header from '../Header';
 import Content from '../Content';
 
-const Layout = () => {
+const Layout = ({ children }) => {
 	return (
 		<Container>
 			<Header />
-			<Content />
+			<Content>{children}</Content>
 		</Container>
 	);
 };

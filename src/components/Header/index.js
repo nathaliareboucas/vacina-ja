@@ -1,11 +1,17 @@
 import React from 'react';
 
-import { Container } from './styles';
+import logo from '../../assets/logo.png';
+import imgLogout from '../../assets/exit.png';
+
+import { Container, Logo, Logout } from './styles';
 
 const Header = () => {
 	return (
 		<Container>
-			<h1>Header</h1>
+			<Logo src={logo} alt="Logo Vacina Já" />
+			<Logout>
+				<img src={imgLogout} alt="Sair" />
+			</Logout>
 		</Container>
 	);
 };
