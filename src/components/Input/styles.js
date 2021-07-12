@@ -6,4 +6,5 @@ export const Container = styled.input`
 	padding: 10px;
 	border-radius: 5px;
 	border: 1px solid #ccc;
+	color: #757575;
 `;

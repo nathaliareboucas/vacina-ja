@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { Container, ContainerCard, Banner, Title, Form, FormItem, Actions } from './styles';
 import imageBanner from '../../assets/banner.jpg';
@@ -14,32 +15,43 @@ const Cadastro = () => {
 		email: '',
 		cpf: '',
 		dataNascimento: '',
-		municipio: ''		
+		municipio: '',
 	};
 
-	const [dadosForm, setDadosForm] = useState(initialState);
+	const UF = 23; // Id do Estado do Ceara
+	const [ dadosForm, setDadosForm ] = useState(initialState);
+	const [ municipios, setMunicipios ] = useState([ { label: 'Selecione', value: '' } ]);
 
 	const handleChange = (event) => {
 		setDadosForm({
 			...dadosForm,
-			[event.currentTarget.name]: event.currentTarget.value
-		})
+			[event.currentTarget.name]: event.currentTarget.value,
+		});
+	};
+
+	const handleClick = () => {
+		setDadosForm(initialState);
 	};
 
 	async function handleSubmit(event) {
-    event.preventDefault();
-		console.log(dadosForm);   
-	}
-	
-	const handleClick = () => {
-		setDadosForm(initialState);
+		event.preventDefault();
+		console.log(dadosForm);
 	}
 
-	const municipios = [
-		{ label: 'Fortaleza', value: 'CE' },
-		{ label: 'São Paulo', value: 'SP' },
-		{ label: 'Rio de Janeiro', value: 'RJ' },
-	];
+	useEffect(
+		() => {
+			axios
+				.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${UF}/municipios?orderBy=nome`)
+				.then((municipiosIBGE) => {
+					let opcoesMunicipios = municipiosIBGE.data.map((municipio) => {
+						return { value: municipio.nome, label: municipio.nome };
+					});
+					opcoesMunicipios.push({ value: '', label: 'Selecione' });
+					setMunicipios(opcoesMunicipios);
+				});
+		},
+		[ municipios ]
+	);
 
 	return (
 		<Container>
@@ -94,15 +106,19 @@ const Cadastro = () => {
 								onChange={handleChange}
 							/>
 
-							<SelectInput options={municipios} />
+							<SelectInput
+								name="municipio"
+								options={municipios}
+								onChange={handleChange}
+								defaultValue={municipios[0]}
+							/>
 						</FormItem>
 
 						<Actions>
 							<Button bgcolor="#2fb6ba" color="#fff" width="150px" type="submit">
 								Salvar
 							</Button>
-							<Button bgcolor="#fe4643" color="#fff" width="150px" type="button"
-								onClick={handleClick}>
+							<Button bgcolor="#fe4643" color="#fff" width="150px" type="button" onClick={handleClick}>
 								Cancelar
 							</Button>
 						</Actions>
