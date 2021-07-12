@@ -6,13 +6,34 @@ import Card from '../../components/Card';
 import Input from '../../components/Input';
 import SelectInput from '../../components/SelectInput';
 import Button from '../../components/Button';
+import InputMask from '../../components/InputMask';
 
 const Cadastro = () => {
-	const [ nome, setNome ] = useState('');
-	const [ email, setEmail ] = useState('');
-	const [ cpf, setCpf ] = useState('');
-	const [ dataNascimento, setDataNascimento ] = useState('');
-	const [ municipio, setMunicipio ] = useState('');
+	const initialState = {
+		nome: '',
+		email: '',
+		cpf: '',
+		dataNascimento: '',
+		municipio: ''		
+	};
+
+	const [dadosForm, setDadosForm] = useState(initialState);
+
+	const handleChange = (event) => {
+		setDadosForm({
+			...dadosForm,
+			[event.currentTarget.name]: event.currentTarget.value
+		})
+	};
+
+	async function handleSubmit(event) {
+    event.preventDefault();
+		console.log(dadosForm);   
+	}
+	
+	const handleClick = () => {
+		setDadosForm(initialState);
+	}
 
 	const municipios = [
 		{ label: 'Fortaleza', value: 'CE' },
@@ -28,38 +49,47 @@ const Cadastro = () => {
 				<Card width="80%" height="80%">
 					<Title>Cadastro</Title>
 
-					<Form>
+					<Form onSubmit={handleSubmit}>
 						<FormItem>
 							<Input
-								id="nome"
-								value={nome}
+								name="nome"
+								value={dadosForm.nome}
+								required
 								placeholder="Nome completo"
-								onChange={(event) => setNome(event.target.value)}
+								onChange={handleChange}
 							/>
 						</FormItem>
 
 						<FormItem>
 							<Input
-								id="email"
-								value={email}
+								name="email"
+								value={dadosForm.email}
 								placeholder="Email"
-								onChange={(event) => setEmail(event.target.value)}
+								required
+								type="email"
+								onChange={handleChange}
 							/>
 						</FormItem>
 
 						<FormItem>
-							<Input
-								id="cpf"
-								value={cpf}
+							<InputMask
+								name="cpf"
+								value={dadosForm.cpf}
 								placeholder="CPF"
-								onChange={(event) => setCpf(event.target.value)}
+								required
+								mask="cpf"
+								width="100%"
+								onChange={handleChange}
 							/>
 
-							<Input
-								id="dataNascimento"
-								value={dataNascimento}
+							<InputMask
+								name="dataNascimento"
+								value={dadosForm.dataNascimento}
 								placeholder="Data nascimento"
-								onChange={(event) => setDataNascimento(event.target.value)}
+								required
+								mask="date"
+								width="100%"
+								onChange={handleChange}
 							/>
 
 							<SelectInput options={municipios} />
@@ -69,7 +99,8 @@ const Cadastro = () => {
 							<Button bgcolor="#2fb6ba" color="#fff" width="150px" type="submit">
 								Salvar
 							</Button>
-							<Button bgcolor="#fe4643" color="#fff" width="150px" type="button">
+							<Button bgcolor="#fe4643" color="#fff" width="150px" type="button"
+								onClick={handleClick}>
 								Cancelar
 							</Button>
 						</Actions>
