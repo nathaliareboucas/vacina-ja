@@ -79,6 +79,7 @@ const Cadastro = () => {
 								required
 								mask="cpf"
 								width="100%"
+								maxLength="14"
 								onChange={handleChange}
 							/>
 
@@ -89,6 +90,7 @@ const Cadastro = () => {
 								required
 								mask="date"
 								width="100%"
+								maxLength="10"
 								onChange={handleChange}
 							/>
 

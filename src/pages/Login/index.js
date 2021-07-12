@@ -7,31 +7,49 @@ import { Container, Banner, Form, FormItem, Actions } from './styles';
 import Card from '../../components/Card';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import InputMask from '../../components/InputMask';
 
 const Login = () => {
-	const [ cpf, setCpf ] = useState('');
-	const [ senha, setSenha ] = useState('');
+	const [formLogin, setFormLogin] = useState({cpf:'', senha:''});
+
+	const handleChange = (event) => {
+		setFormLogin({
+			...formLogin,
+			[event.currentTarget.name]: event.currentTarget.value
+		})
+	};
+
+	async function handleSubmit(event) {
+    event.preventDefault();
+		console.log(formLogin);   
+	}
 
 	return (
 		<Container>
 			<Card width="400px" height="390px" alignItens="center">
 				<Banner src={banner} alt="banner vacinação" />
-				<Form id="login">
+				<Form id="login" onSubmit={handleSubmit}>
 					<FormItem>
-						<Input
-							id="cpf"
-							value={cpf}
+						<InputMask
+							name="cpf"
+							value={formLogin.cpf}
 							placeholder="CPF"
-							onChange={(event) => setCpf(event.target.value)}
+							required
+							mask="cpf"
+							maxLength="14"
+							width="100%"
+							onChange={handleChange}
 						/>
 					</FormItem>
 
 					<FormItem>
 						<Input
-							id="senha"
-							value={senha}
+							name="senha"
+							value={formLogin.senha}
 							placeholder="Senha"
-							onChange={(event) => setSenha(event.target.value)}
+							required
+							type="password"
+							onChange={handleChange}
 						/>
 					</FormItem>
 
