@@ -6,7 +6,7 @@ import Home from '../pages/Home';
 
 const AppRoutes = () => (
 	<Layout>
-		<Route path="/home" component={Home} />
+		<Route path="/home/:id" component={Home} />
 	</Layout>
 );
 

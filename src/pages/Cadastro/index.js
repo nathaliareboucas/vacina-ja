@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import { Container, ContainerCard, Banner, Title, Form, FormItem, Actions } from './styles';
@@ -8,6 +9,7 @@ import Input from '../../components/Input';
 import SelectInput from '../../components/SelectInput';
 import Button from '../../components/Button';
 import InputMask from '../../components/InputMask';
+import api from '../../services/api';
 
 const Cadastro = () => {
 	const initialState = {
@@ -21,6 +23,7 @@ const Cadastro = () => {
 	const UF = 23; // Id do Estado do Ceara
 	const [ dadosForm, setDadosForm ] = useState(initialState);
 	const [ municipios, setMunicipios ] = useState([ { label: 'Selecione', value: '' } ]);
+	const history = useHistory();
 
 	const handleChange = (event) => {
 		setDadosForm({
@@ -35,20 +38,25 @@ const Cadastro = () => {
 
 	async function handleSubmit(event) {
 		event.preventDefault();
-		console.log(dadosForm);
+		await api.post('/usuarios', dadosForm);
+		alert('Cadastro realizado com sucesso!');
+		setDadosForm(initialState);
+		history.push('/');
 	}
 
 	useEffect(
 		() => {
-			axios
-				.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${UF}/municipios?orderBy=nome`)
-				.then((municipiosIBGE) => {
-					let opcoesMunicipios = municipiosIBGE.data.map((municipio) => {
-						return { value: municipio.nome, label: municipio.nome };
+			if (municipios.length === 1) {
+				axios
+					.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${UF}/municipios?orderBy=nome`)
+					.then((municipiosIBGE) => {
+						let opcoesMunicipios = municipiosIBGE.data.map((municipio) => {
+							return { value: municipio.nome, label: municipio.nome };
+						});
+						opcoesMunicipios.push({ value: '', label: 'Selecione' });
+						setMunicipios(opcoesMunicipios);
 					});
-					opcoesMunicipios.push({ value: '', label: 'Selecione' });
-					setMunicipios(opcoesMunicipios);
-				});
+			}
 		},
 		[ municipios ]
 	);
@@ -91,7 +99,6 @@ const Cadastro = () => {
 								required
 								mask="cpf"
 								width="100%"
-								maxLength="14"
 								onChange={handleChange}
 							/>
 
@@ -102,7 +109,6 @@ const Cadastro = () => {
 								required
 								mask="date"
 								width="100%"
-								maxLength="10"
 								onChange={handleChange}
 							/>
 
