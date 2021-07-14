@@ -4,7 +4,7 @@ export const Container = styled.div`
 	margin: 0 5px;
 
 	> select {
-		width: 300px;
+		width: 500px;
     height: 37px;
 		padding: 7px 10px;
 		border-radius: 5px;

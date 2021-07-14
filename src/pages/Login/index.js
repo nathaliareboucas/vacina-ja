@@ -1,68 +1,20 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { useLocation, Redirect } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
 
-import banner from '../../assets/banner.jpg';
+const Login = ({...props}) => {
 
-import { Container, Banner, Form, FormItem, Actions } from './styles';
-import Card from '../../components/Card';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import InputMask from '../../components/InputMask';
+	const {keycloak} = useKeycloak();
+	const location = useLocation();
 
-const Login = () => {
-	const [formLogin, setFormLogin] = useState({cpf:'', senha:''});
+	const {from} = location.state || {from: {pathname: '/'}};
 
-	const handleChange = (event) => {
-		setFormLogin({
-			...formLogin,
-			[event.currentTarget.name]: event.currentTarget.value
-		})
-	};
-
-	async function handleSubmit(event) {
-    event.preventDefault();
-		console.log(formLogin);   
+	if (keycloak?.authenticated) {
+		return <Redirect to={from} />
+	} else {
+		keycloak?.login();
+		return <div>Carregando...</div>
 	}
-
-	return (
-		<Container>
-			<Card width="400px" height="390px" alignItens="center">
-				<Banner src={banner} alt="banner vacinação" />
-				<Form id="login" onSubmit={handleSubmit}>
-					<FormItem>
-						<InputMask
-							name="cpf"
-							value={formLogin.cpf}
-							placeholder="CPF"
-							required
-							mask="cpf"
-							maxLength="14"
-							width="100%"
-							onChange={handleChange}
-						/>
-					</FormItem>
-
-					<FormItem>
-						<Input
-							name="senha"
-							value={formLogin.senha}
-							placeholder="Senha"
-							required
-							type="password"
-							onChange={handleChange}
-						/>
-					</FormItem>
-
-					<Actions>
-						<Button type="submit" width="100%" bgcolor="#2fb6ba" color="#fff">
-							Acessar
-						</Button>
-						<Link to="/cadastro">Cadastre-se</Link>
-					</Actions>
-				</Form>
-			</Card>
-		</Container>
-	);
 };
 
 export default Login;

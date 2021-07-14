@@ -5,7 +5,14 @@ export const Container = styled.div`
 	background-color: #37b9b9;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: left;
+`;
+
+export const Nav = styled.nav`
+	flex: 1;
+	display: flex;
+	margin-left: 40px;
+	align-items: center;
 `;
 
 export const Logo = styled.img`
